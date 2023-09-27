@@ -40,24 +40,24 @@ def PublishPositionToMQTT(Position):
     
     mqttc.on_publish = on_publish    
     
-    if len(sys.argv) > 5:
-        mqttc.username_pw_set(sys.argv[4], sys.argv[5]) 
+    if len(sys.argv) > 6:
+        mqttc.username_pw_set(sys.argv[5], sys.argv[6]) 
     
-    print("Connecting to mqtt broker " + sys.argv[2])
+    print("Connecting to mqtt broker " + sys.argv[3])
     
-    mqttc.connect(sys.argv[2], 1883)
+    mqttc.connect(sys.argv[3], 1883)
     
-    print("Connected to mqtt broker " + sys.argv[2])
+    print("Connected to mqtt broker " + sys.argv[3])
     
-    res = mqttc.publish(sys.argv[3] + '/' + sys.argv[1], str(Position))
+    res = mqttc.publish(sys.argv[4] + '/' + sys.argv[2], str(Position))
 
     mqttc.disconnect()
     
     return res[0] == 0
     
     
-if len(sys.argv) < 4:
-    print ("Usage: python gpt_mqtt.py <chase_callsign> <mqtt_broker> <mqtt_path> [<mqtt_username> <mqtt_password>]")
+if len(sys.argv) < 5:
+    print ("Usage: python gpt_mqtt.py <gps_device> <chase_callsign> <mqtt_broker> <mqtt_path> [<mqtt_username> <mqtt_password>]")
     quit()    
     
 ser = serial.Serial()
@@ -65,7 +65,7 @@ ser.baudrate = 9600
 ser.stopbits = 1
 ser.bytesize = 8
 ser.timeout = 0
-ser.port = '/dev/ttyACM0'
+ser.port = sys.argv[1]
 
 ser.open()
 Line = ''
