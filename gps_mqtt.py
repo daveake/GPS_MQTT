@@ -3,6 +3,7 @@ import sys
 import time
 import serial
 import math
+import json
 
 def FixPosition(Position):
     Position = Position / 100
@@ -28,7 +29,7 @@ def ProcessLine(Line):
                 Altitude = float(Fields[9])
                 Sats = int(Fields[7])
                 
-                return {'time': Time, 'lat': "%.5f" % Latitude, 'lon': "%.5f" % Longitude, 'alt': "%.f" % Altitude, 'sats': Sats}
+                return {'time': Time, 'lat': Latitude, 'lon': Longitude, 'alt': Altitude, 'sats': Sats}
                 
     return None
 
@@ -49,7 +50,7 @@ def PublishPositionToMQTT(Position):
     
     print("Connected to mqtt broker " + sys.argv[3])
     
-    res = mqttc.publish(sys.argv[4] + '/' + sys.argv[2], str(Position))
+    res = mqttc.publish(sys.argv[4] + '/' + sys.argv[2], json.dumps(Position))
 
     mqttc.disconnect()
     
