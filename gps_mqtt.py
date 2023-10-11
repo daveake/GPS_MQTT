@@ -71,6 +71,7 @@ ser.port = sys.argv[1]
 ser.open()
 Line = ''
 Position = None
+Count = 0
 
 while True:
     # Do incoming characters
@@ -86,7 +87,11 @@ while True:
                 # print(Line)
                 NewPosition = ProcessLine(Line)
                 if NewPosition:
-                    Position = NewPosition
+                    if Count > 0:
+                        Count = Count - 1
+                    else:
+                        Position = NewPosition
+                        Count = 5
                                    
                 Line = ''
                 time.sleep(0.01)
